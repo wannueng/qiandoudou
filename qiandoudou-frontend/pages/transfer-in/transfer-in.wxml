@@ -1,0 +1,170 @@
+<!--pages/transfer-in/transfer-in.wxml-->
+<view class="container">
+  <!-- 顶部导航 -->
+  <view class="top-nav">
+    <view class="nav-left">
+      <view class="back-btn" bindtap="goBack">
+        <text class="back-arrow">‹</text>
+      </view>
+    </view>
+    <view class="nav-center">
+      <text class="nav-title">转入</text>
+    </view>
+    <view class="nav-right"></view>
+  </view>
+
+  <!-- 页签切换 -->
+  <view class="tab-section">
+    <view class="tab-item {{activeTab === 'direct' ? 'active' : ''}}" bindtap="switchTab" data-tab="direct">
+      <text class="tab-text">直接转入</text>
+    </view>
+    <view class="tab-item {{activeTab === 'auto' ? 'active' : ''}}" bindtap="switchTab" data-tab="auto">
+      <text class="tab-text">自动攒</text>
+    </view>
+  </view>
+
+  <!-- 直接转入页面 -->
+  <view wx:if="{{activeTab === 'direct'}}" class="direct-transfer">
+    <!-- 转出金额卡片 -->
+    <view class="amount-card">
+      <view class="card-header">
+        <text class="card-title">转入金额</text>
+        <!-- 移除关闭按钮 -->
+      </view>
+      <view class="amount-input-section">
+        <text class="currency-symbol">¥</text>
+        <input class="amount-input" 
+               type="digit" 
+               placeholder="请输入金额" 
+               value="{{transferAmount}}" 
+               bindinput="onAmountInput"
+               focus="{{amountFocus}}" />
+      </view>
+    </view>
+
+    <!-- 备注卡片 -->
+    <view class="note-card">
+      <view class="note-header">
+        <text class="note-title">备注</text>
+      </view>
+      <view class="note-content">
+        <textarea class="note-textarea" 
+                  placeholder="山高水长，风景美如画。坐等仙女下凡，赐予我一片云彩，好飞到湖里泡个澡！"
+                  value="{{transferNote}}"
+                  bindinput="onNoteInput"
+                  maxlength="200"></textarea>
+        <view class="note-actions">
+          <view class="retry-btn" bindtap="retryNote">
+            <text class="retry-icon">🔄</text>
+            <text class="retry-text">再试一次</text>
+          </view>
+          <text class="char-count">{{noteLength}}/200</text>
+        </view>
+        
+        <!-- 图片上传区域 -->
+        <view class="image-upload-section">
+          <view wx:if="{{!uploadedImage}}" class="upload-placeholder" bindtap="uploadImage">
+            <text class="upload-icon">📷</text>
+          </view>
+          <view wx:else class="uploaded-image">
+            <image class="note-image" src="{{uploadedImage}}" mode="aspectFill"></image>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 自动攒页面 -->
+  <view wx:if="{{activeTab === 'auto'}}" class="auto-save">
+    <!-- 攒钱方式 -->
+    <view class="setting-card">
+      <view class="setting-row" bindtap="showSaveMethodOptions">
+        <text class="setting-label">攒钱方式</text>
+        <view class="setting-value">
+          <text class="value-text">{{autoSaveSettings.method}}</text>
+          <text class="arrow-icon">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 金额设置 -->
+    <view class="setting-card">
+      <view class="setting-row" bindtap="showAmountOptions">
+        <text class="setting-label">金额</text>
+        <view class="setting-value">
+          <text class="value-text">{{autoSaveSettings.amount}}元</text>
+          <text class="arrow-icon">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 攒多久 -->
+    <view class="setting-card">
+      <view class="setting-row" bindtap="showDurationOptions">
+        <text class="setting-label">攒多久</text>
+        <view class="setting-value">
+          <text class="value-text">{{autoSaveSettings.duration}}</text>
+          <text class="arrow-icon">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 攒钱方式说明 -->
+    <view class="setting-card">
+      <view class="setting-row-static">
+        <text class="setting-label">攒钱方式</text>
+        <view class="setting-value">
+          <text class="value-text gray">{{autoSaveSettings.startTime}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 扣款方式 -->
+    <view class="setting-card">
+      <view class="setting-row" bindtap="showPaymentOptions">
+        <text class="setting-label">扣款方式</text>
+        <view class="setting-value">
+          <text class="value-text">{{autoSaveSettings.paymentMethod}}</text>
+          <text class="arrow-icon">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 收益预估 -->
+    <view class="estimate-card">
+      <text class="estimate-text">每日攒<text class="highlight">{{autoSaveSettings.amount}}元</text> 一年后大约可攒<text class="highlight orange">{{estimatedAmount}}元</text></text>
+    </view>
+
+    <!-- 计划备注 -->
+    <view class="plan-note-section">
+      <text class="section-title">计划备注</text>
+      <input class="plan-input" 
+             placeholder="计划名称(非必填，不超过15个字)"
+             value="{{planName}}"
+             bindinput="onPlanNameInput"
+             maxlength="15" />
+      
+      <view class="theme-buttons">
+        <view class="theme-btn {{selectedTheme === 'custom' ? 'active' : ''}}" bindtap="selectTheme" data-theme="custom">
+          <text class="theme-text">自定义</text>
+        </view>
+        <view class="theme-btn {{selectedTheme === 'preset' ? 'active' : ''}}" bindtap="selectTheme" data-theme="preset">
+          <text class="theme-text">加油主题</text>
+        </view>
+      </view>
+
+      <view class="agreement-section">
+        <text class="agreement-text">查看《平安银行钱兜兜自动攒协议》</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部确认按钮 -->
+  <view class="bottom-action">
+    <button class="confirm-btn" 
+            bindtap="confirmTransfer" 
+            disabled="{{transferLoading}}">
+      <text class="btn-text">{{transferLoading ? '处理中...' : (activeTab === 'auto' ? '同意协议 立即开启' : '确认转入')}}</text>
+    </button>
+  </view>
+</view>

@@ -1,0 +1,138 @@
+<!--pages/edit-profile/edit-profile.wxml-->
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="top-nav">
+    <view class="nav-left" bindtap="goBack">
+      <view class="back-icon"></view>
+    </view>
+    <view class="nav-title">编辑账号信息</view>
+    <view class="nav-right"></view>
+  </view>
+
+  <!-- 兜圈圈身份信息 -->
+  <view class="section-title">兜圈圈身份信息</view>
+  
+  <view class="info-card">
+    <!-- 头像 -->
+    <view class="info-item" bindtap="changeAvatar">
+      <text class="item-label">头像</text>
+      <view class="item-content">
+        <view class="avatar-preview">
+          <image wx:if="{{userInfo.hasCustomAvatar && userInfo.avatar}}" 
+                 class="avatar-image" 
+                 src="{{userInfo.avatar}}" 
+                 mode="aspectFill"/>
+          <text wx:else class="avatar-text">{{userInfo.nickname ? userInfo.nickname.charAt(0) : '用'}}</text>
+          <view wx:if="{{isUploadingAvatar}}" class="upload-loading">
+            <view class="loading-spinner"></view>
+          </view>
+        </view>
+        <view class="arrow-icon"></view>
+      </view>
+    </view>
+    
+    <view class="divider"></view>
+    
+    <!-- 昵称 -->
+    <view class="info-item" bindtap="editNickname">
+      <text class="item-label">昵称</text>
+      <view class="item-content">
+        <text class="item-value">{{userInfo.nickname || '昆虫记'}}</text>
+        <view class="arrow-icon"></view>
+      </view>
+    </view>
+    
+    <view class="divider"></view>
+    
+    <!-- 性别 -->
+    <view class="info-item" bindtap="editGender">
+      <text class="item-label">性别</text>
+      <view class="item-content">
+        <text class="item-value {{!userInfo.gender ? 'placeholder' : ''}}">{{userInfo.gender || '待填写'}}</text>
+        <view class="arrow-icon"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 简介 -->
+  <view class="info-card single-item">
+    <view class="info-item" bindtap="editDescription">
+      <text class="item-label">简介</text>
+      <view class="item-content">
+        <text class="item-value">{{userInfo.description || '每100个粉丝，打卡一个5A级景区'}}</text>
+        <view class="arrow-icon"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 荷包圈身份信息 -->
+  <view class="section-title">荷包圈身份信息</view>
+  
+  <view class="info-card">
+    <!-- 公开钱兜兜在主页可见 -->
+    <view class="info-item">
+      <text class="item-label">公开钱兜兜在主页可见</text>
+      <view class="item-content">
+        <switch class="switch-control" 
+               checked="{{settings.showPublicWallets}}" 
+               bindchange="onPublicWalletsToggle"/>
+      </view>
+    </view>
+    
+    <view class="divider"></view>
+    
+    <!-- 关注钱兜兜在主页可见 -->
+    <view class="info-item">
+      <text class="item-label">关注钱兜兜在主页可见</text>
+      <view class="item-content">
+        <switch class="switch-control" 
+               checked="{{settings.showFollowedWallets}}" 
+               bindchange="onFollowedWalletsToggle"/>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 隐藏的canvas用于图片处理 -->
+<canvas canvas-id="avatarCanvas" style="position: absolute; left: -9999px; top: -9999px; width: 200px; height: 200px;"></canvas>
+
+<!-- 编辑弹窗 -->
+<view wx:if="{{showEditModal}}" class="modal-overlay" bindtap="closeEditModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">编辑{{editType === 'nickname' ? '昵称' : editType === 'gender' ? '性别' : '简介'}}</text>
+      <view class="modal-close" bindtap="closeEditModal">×</view>
+    </view>
+    
+    <view class="modal-body">
+      <view wx:if="{{editType === 'nickname' || editType === 'description'}}" class="input-group">
+        <input class="edit-input" 
+               placeholder="{{editType === 'nickname' ? '请输入昵称' : '请输入简介'}}"
+               value="{{editValue}}"
+               bindinput="onEditInput"
+               maxlength="{{editType === 'nickname' ? 20 : 100}}"/>
+        <text class="input-counter">{{editValue.length}}/{{editType === 'nickname' ? 20 : 100}}</text>
+      </view>
+      
+      <view wx:if="{{editType === 'gender'}}" class="gender-options">
+        <view class="gender-option {{editValue === '男' ? 'selected' : ''}}" 
+              bindtap="selectGender" data-gender="男">
+          <text>男</text>
+        </view>
+        <view class="gender-option {{editValue === '女' ? 'selected' : ''}}" 
+              bindtap="selectGender" data-gender="女">
+          <text>女</text>
+        </view>
+        <view class="gender-option {{editValue === '保密' ? 'selected' : ''}}" 
+              bindtap="selectGender" data-gender="保密">
+          <text>保密</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="modal-footer">
+      <button class="cancel-btn" bindtap="closeEditModal">取消</button>
+      <button class="confirm-btn" bindtap="confirmEdit">确定</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,66 @@
+<!--pages/ai-chat/ai-chat.wxml-->
+<view class="container">
+  <!-- 聊天头部 -->
+  <view class="chat-header">
+    <view class="partner-info">
+      <image class="partner-avatar" src="{{partner.avatar}}" mode="aspectFill" />
+      <view class="partner-details">
+        <text class="partner-name">{{partner.name}}</text>
+        <text class="partner-status">在线</text>
+      </view>
+    </view>
+    <view class="wallet-info">
+      <text class="wallet-name">{{wallet.name}}</text>
+      <text class="wallet-balance">¥{{wallet.balance}}</text>
+    </view>
+  </view>
+
+  <!-- 聊天消息列表 -->
+  <scroll-view class="chat-messages" scroll-y="true" scroll-top="{{scrollTop}}" scroll-into-view="{{scrollIntoView}}">
+    <view wx:for="{{messages}}" wx:key="id" class="message-item {{item.type === 'user' ? 'user-message' : 'ai-message'}}" id="msg-{{item.id}}">
+      
+      <!-- AI消息 -->
+      <view wx:if="{{item.type === 'ai'}}" class="ai-msg">
+        <image class="msg-avatar" src="{{partner.avatar}}" mode="aspectFill" />
+        <view class="msg-content">
+          <text class="msg-text">{{item.content}}</text>
+          <text class="msg-time">{{item.time}}</text>
+        </view>
+      </view>
+
+      <!-- 用户消息 -->
+      <view wx:else class="user-msg">
+        <view class="msg-content">
+          <text class="msg-text">{{item.content}}</text>
+          <text class="msg-time">{{item.time}}</text>
+        </view>
+        <view class="msg-avatar user-avatar">{{userInfo.nickname ? userInfo.nickname.charAt(0) : 'U'}}</view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 快捷回复 -->
+  <view wx:if="{{quickReplies.length > 0}}" class="quick-replies">
+    <text wx:for="{{quickReplies}}" wx:key="*this" 
+          class="quick-reply" 
+          bindtap="sendQuickReply" 
+          data-text="{{item}}">
+      {{item}}
+    </text>
+  </view>
+
+  <!-- 输入区域 -->
+  <view class="input-area">
+    <view class="input-container">
+      <input class="message-input" 
+             placeholder="和{{partner.name}}说点什么..." 
+             bindinput="onMessageInput" 
+             value="{{inputMessage}}"
+             confirm-type="send"
+             bindconfirm="sendMessage" />
+      <button class="send-btn" bindtap="sendMessage" disabled="{{!inputMessage.trim()}}">
+        发送
+      </button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,61 @@
+<!--pages/couple-savings/couple-savings.wxml-->
+<view class="container">
+  <!-- 全屏背景图 -->
+  <image 
+    class="fullscreen-background" 
+    src="{{partners[currentIndex].fullImage}}" 
+    mode="aspectFill"
+    lazy-load="true"
+    show-menu-by-longpress="false"
+  />
+  
+  <!-- 上半部分：内容展示区域 -->
+  <view class="main-display">
+    <!-- 人物信息放在腰身位置 -->
+    <view class="partner-info-center">
+      <text class="partner-name-large">{{partners[currentIndex].name}}</text>
+      <view class="partner-tags-center">
+        <text wx:for="{{partners[currentIndex].tags}}" wx:key="*this" class="tag-pill">{{item}}</text>
+      </view>
+      <text class="partner-desc-center">{{partners[currentIndex].description}}</text>
+      
+      <!-- 邀请按钮放在签名下方 - 修复层级问题 -->
+      <view class="invite-btn-center-fixed" catchtap="onInviteTap">
+        <text class="invite-text">邀请</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 头像轮播区域（无背景框） -->
+  <view class="avatar-section-overlay">
+    <!-- 头像轮播 -->
+    <swiper 
+      class="avatar-swiper" 
+      current="{{currentIndex}}" 
+      bindchange="onSwiperChange"
+      display-multiple-items="3"
+      previous-margin="60rpx"
+      next-margin="60rpx"
+    >
+      <swiper-item wx:for="{{partners}}" wx:key="id" class="avatar-item">
+        <view 
+          class="avatar-container {{currentIndex === index ? 'active' : ''}}"
+          bindtap="onAvatarTap"
+          data-index="{{index}}"
+        >
+          <image 
+            class="avatar-image" 
+            src="{{item.avatar}}" 
+            mode="aspectFill"
+            lazy-load="true"
+            show-menu-by-longpress="false"
+            webp="true"
+          />
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+</view>
+
+
+

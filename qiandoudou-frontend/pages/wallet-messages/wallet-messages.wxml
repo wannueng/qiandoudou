@@ -1,0 +1,68 @@
+<!--pages/wallet-messages/wallet-messages.wxml-->
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="top-nav">
+    <view class="nav-left" bindtap="goBack">
+      <view class="back-icon"></view>
+    </view>
+    <view class="nav-title">钱兜兜互动消息</view>
+    <view class="nav-right"></view>
+  </view>
+
+  <!-- 消息列表 -->
+  <view class="messages-list">
+    <!-- 加载状态 -->
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 消息项 -->
+    <view wx:for="{{messages}}" wx:key="id" class="message-item" bindtap="onMessageTap" data-message="{{item}}">
+      <!-- 左侧用户头像 -->
+      <view class="user-avatar-container">
+        <view class="user-avatar">
+          <image wx:if="{{item.user.avatar}}" 
+                 class="avatar-image" 
+                 src="{{item.user.avatar}}" 
+                 mode="aspectFill"/>
+          <text wx:else class="avatar-text">{{item.user.nickname ? item.user.nickname.charAt(0) : '用'}}</text>
+        </view>
+      </view>
+
+      <!-- 中间内容区域 -->
+      <view class="message-content">
+        <!-- 第一行：用户名称 -->
+        <view class="user-name">{{item.user.nickname || '用户'}}</view>
+        
+        <!-- 第二行：互动内容 -->
+        <view class="interaction-content">
+          <text wx:if="{{item.type === 'follow'}}">关注了你</text>
+          <text wx:elif="{{item.type === 'like'}}">给你点赞</text>
+          <text wx:elif="{{item.type === 'comment'}}">{{item.content}}</text>
+        </view>
+        
+        <!-- 第三行：来源和时间 -->
+        <view class="message-meta">
+          <text class="source">支付宝钱兜兜</text>
+          <text class="time">{{item.timeText}}</text>
+        </view>
+      </view>
+
+      <!-- 右侧动态图片 -->
+      <view class="post-image-container">
+        <image wx:if="{{item.postImage}}" 
+               class="post-image" 
+               src="{{item.postImage}}" 
+               mode="aspectFill"/>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{!loading && messages.length === 0}}" class="empty-state">
+      <view class="empty-icon">📭</view>
+      <text class="empty-text">暂无互动消息</text>
+      <text class="empty-desc">当有用户关注、点赞或评论你的钱兜兜时，消息会显示在这里</text>
+    </view>
+  </view>
+</view>

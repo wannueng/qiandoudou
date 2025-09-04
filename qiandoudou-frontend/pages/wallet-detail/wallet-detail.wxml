@@ -1,0 +1,374 @@
+<!--pages/wallet-detail/wallet-detail.wxml-->
+<view class="container">
+  <!-- 顶部钱包背景区域 -->
+  <view class="wallet-header-section">
+    <!-- 背景图片和遮罩 -->
+    <view class="wallet-background" style="{{walletBackgroundStyle}}" bindtap="{{isOwnWallet ? 'showBackgroundModal' : ''}}">
+      <view class="background-overlay"></view>
+      
+      <!-- 背景点击提示（只在自己钱包时显示） -->
+      <view wx:if="{{showBackgroundHint && isOwnWallet}}" class="background-hint">
+        <text class="hint-text">点击更换背景</text>
+      </view>
+      
+      <!-- 顶部导航 -->
+      <view class="header-nav">
+        <view class="nav-left" bindtap="goBackToWalletList">
+          <view class="back-icon"></view>
+        </view>
+      </view>
+      
+      <!-- 用户信息 -->
+      <view class="user-info" catchtap="stopPropagation">
+        <view class="user-avatar">
+          <text class="avatar-text">{{wallet.name ? wallet.name.charAt(0) : 'U'}}</text>
+        </view>
+        <view class="user-details">
+          <text class="user-title" bindtap="{{isOwnWallet ? 'editWalletName' : ''}}">{{wallet.name || '钱兜兜'}}💗</text>
+          <text class="user-tags">#{{wallet.type === 2 ? '情侣' : '个人'}} #攒钱 #{{wallet.ai_partner_name || '理财'}}</text>
+          <text class="user-desc">{{wallet.owner_nickname || wallet.name || '用户'}}的钱兜兜，当前余额 ¥{{wallet.balance || '0.00'}}</text>
+        </view>
+      </view>
+      
+      <!-- 统计信息 -->
+      <view class="stats-info" catchtap="stopPropagation">
+        <view class="stat-item">
+          <text class="stat-number">{{socialStats.fansCount !== undefined ? socialStats.fansCount : (wallet.followers_count || 0)}}</text>
+          <text class="stat-label">粉丝</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{socialStats.likesCount !== undefined ? socialStats.likesCount : (wallet.likes_count || 0)}}</text>
+          <text class="stat-label">获赞</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{socialStats.viewsCount !== undefined ? socialStats.viewsCount : 0}}</text>
+          <text class="stat-label">浏览</text>
+        </view>
+        
+
+      </view>
+      
+      <!-- 关注按钮（在背景图右下角） -->
+      <view wx:if="{{fromSocial && !isOwnWallet}}" class="follow-button-corner">
+        <image class="follow-btn-image {{isFollowing ? 'following' : ''}}" 
+               src="{{isFollowing ? '/images/res/个人主详情/png/已关注.png' : '/images/res/个人主详情/png/关注.png'}}" 
+               bindtap="toggleFollow"
+               mode="aspectFit" />
+      </view>
+    </view>
+    
+    <!-- 总金额卡片 -->
+    <view class="total-amount-card" catchtap="stopPropagation">
+      <text class="amount-label">总金额（元）</text>
+      <text class="amount-value">{{wallet.balance !== undefined ? wallet.balance : '0.00'}}</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮区域 -->
+  <view wx:if="{{isOwnWallet}}" class="operation-section" catchtap="stopPropagation">
+    <!-- 第一行：转入和转出 -->
+    <view class="operation-buttons">
+      <view class="operation-btn" bindtap="goToTransferIn">
+        <text class="btn-text">转入</text>
+      </view>
+      <view class="operation-btn" bindtap="goToTransferOut">
+        <text class="btn-text">转出</text>
+      </view>
+    </view>
+    
+    <!-- 第二行：剧本攒 -->
+    <view class="script-button-row">
+      <view class="script-btn" bindtap="goToScripts">
+        <text class="script-btn-text">剧本攒</text>
+      </view>
+    </view>
+  </view>
+  
+
+  
+  <!-- 剧本推广卡片（只在自己钱包时显示） -->
+  <view wx:if="{{showPromoCard && isOwnWallet}}" class="script-promotion">
+    <view class="promo-card">
+      <view class="promo-image-placeholder">
+        <text class="image-icon">🎮</text>
+      </view>
+      <view class="promo-content">
+        <text class="promo-title">超级玛丽多恋爱小事</text>
+        <text class="promo-desc">打卡超级玛丽多</text>
+      </view>
+      <view class="promo-action">
+        <view class="close-btn" bindtap="closePromo">
+          <text class="close-icon">×</text>
+        </view>
+        <view class="action-btn-promo">
+          <text class="action-text">去闯关</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+
+
+  <!-- 账单和统计 -->
+  <view class="bill-section">
+    <!-- 标签切换（来自社交圈时简化显示） -->
+    <view class="tab-bar">
+      <view class="tab-item {{activeTab === 'bill' ? 'active' : ''}}" bindtap="{{isOwnWallet ? 'switchTab' : ''}}" data-tab="bill">
+        <text class="tab-text">账单</text>
+      </view>
+      <!-- 统计标签（只在自己钱包时显示） -->
+      <view wx:if="{{isOwnWallet}}" class="tab-item {{activeTab === 'stats' ? 'active' : ''}}" bindtap="switchTab" data-tab="stats">
+        <text class="tab-text">统计</text>
+      </view>
+      <!-- 过滤按钮（只在自己钱包时显示） -->
+      <view wx:if="{{isOwnWallet}}" class="filter-btn" bindtap="showFilter">
+        <text class="filter-text">过滤</text>
+        <text class="filter-icon">🔽</text>
+      </view>
+    </view>
+    
+    <!-- 账单列表（社交动态流水） -->
+    <view wx:if="{{activeTab === 'bill'}}" class="bill-list">
+      <view wx:for="{{transactions}}" wx:key="id" class="social-bill-item">
+        <!-- 用户头像和基本信息 -->
+        <view class="user-header">
+          <!-- AI伴侣头像或用户头像 -->
+          <view class="user-avatar-small">
+            <image wx:if="{{item.isAiTransaction && item.aiPartnerAvatar}}" 
+                   class="ai-avatar-image" 
+                   src="{{item.aiPartnerAvatar}}" 
+                   mode="aspectFill"></image>
+            <text wx:else class="avatar-text">{{wallet.name ? wallet.name.charAt(0) : 'U'}}</text>
+          </view>
+          <view class="transaction-info">
+            <!-- 标题单独一行，加粗 - 显示AI伴侣名称或钱包名称 -->
+            <view class="title-row">
+              <text class="transaction-title">{{item.isAiTransaction ? item.aiPartnerName : (wallet.name || '钱兜兜')}}</text>
+              <view class="transaction-amount">
+                <text class="amount-display {{item.type === 1 ? 'income' : 'expense'}}">
+                  {{item.type === 1 ? '+' : ''}}{{item.amount}}
+                </text>
+              </view>
+            </view>
+            <!-- 流水类型单独一行 -->
+            <view class="subtitle-row">
+              <text class="transaction-subtitle">{{item.subtitle}}</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 交易时间（空一行后显示） -->
+        <view class="transaction-time">
+          <text class="time-text">{{item.create_time}}</text>
+        </view>
+        
+        <!-- AI伴侣消息内容（如果是AI交易） -->
+        <view wx:if="{{item.isAiTransaction && item.aiMessage}}" class="ai-message-content">
+          <text class="ai-message-text">{{item.aiMessage}}</text>
+          <!-- 语音播放按钮（AI伴侣消息总是显示语音播放按钮） -->
+          <view class="voice-play-section">
+            <view class="voice-play-btn {{item.isPlaying ? 'playing' : ''}}" 
+                  bindtap="playAiVoice" 
+                  data-transaction="{{item}}">
+              <text class="voice-icon">🎵</text>
+              <text class="voice-duration">{{item.voiceDuration || '12s'}}</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 备注内容（如果有且不是AI交易） -->
+        <view wx:if="{{!item.isAiTransaction && item.note}}" class="transaction-note">
+          <text class="note-text">{{item.note}}</text>
+        </view>
+        
+        <!-- 图片（如果有） -->
+        <view wx:if="{{item.imageUrl}}" class="transaction-image">
+          <image class="note-image" src="{{item.imageUrl}}" mode="aspectFill"></image>
+        </view>
+        
+        <!-- 社交互动按钮（只在来自社交圈时显示） -->
+        <view wx:if="{{fromSocial}}" class="social-actions">
+          <view class="action-btn {{item.isLiked ? 'liked' : ''}}" bindtap="toggleLike" data-transaction="{{item}}">
+            <text class="action-icon">{{item.isLiked ? '❤️' : '🤍'}}</text>
+            <text class="action-text">{{item.likeCount || 0}}</text>
+          </view>
+          <view class="action-btn" bindtap="showComments" data-transaction="{{item}}">
+            <text class="action-icon">💬</text>
+            <text class="action-text">{{item.commentCount || 0}}</text>
+          </view>
+        </view>
+        
+        <!-- 评论列表（显示在流水下面） -->
+        <view wx:if="{{item.comments && item.comments.length > 0}}" class="transaction-comments">
+          <view wx:for="{{item.comments}}" wx:key="id" wx:for-item="comment" class="comment-item-inline">
+            <view class="comment-user-inline">
+              <text class="comment-username-inline">{{comment.userName}}：</text>
+            </view>
+            <text class="comment-content-inline">{{comment.content}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 统计视图 -->
+    <view wx:if="{{activeTab === 'stats'}}" class="stats-view">
+      <text class="stats-placeholder">统计功能开发中...</text>
+    </view>
+  </view>
+
+  <!-- 转账对话框 -->
+  <view wx:if="{{showTransferModal}}" class="modal-overlay" bindtap="hideTransferModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">{{transferType === 'in' ? '转入资金' : '转出资金'}}</text>
+        <text class="modal-close" bindtap="hideTransferModal">×</text>
+      </view>
+      
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">金额</text>
+          <input class="form-input" type="digit" placeholder="请输入金额" bindinput="onAmountInput" value="{{transferForm.amount}}" />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">说明</text>
+          <textarea class="form-textarea" placeholder="请输入转账说明" bindinput="onDescriptionInput" value="{{transferForm.description}}" maxlength="100"></textarea>
+        </view>
+        
+        <view wx:if="{{transferType === 'out'}}" class="balance-tip">
+          当前余额：¥{{wallet.balance}}
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="btn-cancel" bindtap="hideTransferModal">取消</button>
+        <button class="btn-confirm" bindtap="handleTransfer" disabled="{{transferLoading}}">
+          {{transferLoading ? '处理中...' : (transferType === 'in' ? '确认转入' : '确认转出')}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 更换背景对话框 -->
+  <view wx:if="{{showBackgroundModal}}" class="modal-overlay" bindtap="hideBackgroundModal">
+    <view class="modal-content background-modal" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">更换钱包背景</text>
+        <text class="modal-close" bindtap="hideBackgroundModal">×</text>
+      </view>
+      
+      <view class="modal-body">
+        <!-- 自定义图片上传 -->
+        <view class="upload-section">
+          <text class="section-title">自定义背景</text>
+          <view class="upload-option" bindtap="uploadCustomImage">
+            <text class="upload-icon">📷</text>
+            <text class="upload-text">从相册选择图片</text>
+          </view>
+        </view>
+        
+        <!-- 预设渐变背景 -->
+        <view class="gradient-section">
+          <text class="section-title">预设背景</text>
+          <view class="background-options">
+            <view wx:for="{{backgroundOptions}}" wx:key="value" 
+                  class="background-option {{selectedBackground === item.value ? 'selected' : ''}}"
+                  style="{{item.gradient}}"
+                  bindtap="selectBackground" 
+                  data-value="{{item.value}}">
+              <text class="option-name">{{item.name}}</text>
+              <text wx:if="{{selectedBackground === item.value}}" class="selected-check">✓</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="btn-cancel" bindtap="hideBackgroundModal">取消</button>
+        <button class="btn-confirm" 
+                bindtap="changeBackground" 
+                disabled="{{backgroundLoading}}">
+          {{backgroundLoading ? '保存中...' : '保存'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 钱包名称编辑对话框 -->
+  <view wx:if="{{showNameEditModal}}" class="modal-overlay" bindtap="hideNameEditModal">
+    <view class="modal-content name-edit-modal" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">修改钱包名称</text>
+        <text class="modal-close" bindtap="hideNameEditModal">×</text>
+      </view>
+      
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">钱包名称</text>
+          <input class="form-input" 
+                 type="text" 
+                 placeholder="请输入钱包名称" 
+                 value="{{editingName}}" 
+                 bindinput="onNameInput" 
+                 maxlength="20" />
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="btn-cancel" bindtap="hideNameEditModal">取消</button>
+        <button class="btn-confirm" bindtap="confirmNameEdit">
+          确认修改
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 评论对话框 -->
+  <view wx:if="{{showCommentModal}}" class="modal-overlay" bindtap="hideCommentModal">
+    <view class="modal-content comment-modal" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">评论</text>
+        <text class="modal-close" bindtap="hideCommentModal">×</text>
+      </view>
+      
+      <view class="modal-body">
+        <!-- 现有评论列表 -->
+        <view wx:if="{{currentComments.length > 0}}" class="comments-list">
+          <view wx:for="{{currentComments}}" wx:key="id" class="comment-item">
+            <view class="comment-user">
+              <view class="comment-avatar">
+                <text class="avatar-text">{{item.userName ? item.userName.charAt(0) : 'U'}}</text>
+              </view>
+              <text class="comment-username">{{item.userName || '用户'}}</text>
+              <text class="comment-time">{{item.time}}</text>
+            </view>
+            <text class="comment-content">{{item.content}}</text>
+          </view>
+        </view>
+        
+        <!-- 无评论提示 -->
+        <view wx:if="{{currentComments.length === 0}}" class="no-comments">
+          <text class="no-comments-text">暂无评论</text>
+        </view>
+        
+        <!-- 评论输入 -->
+        <view class="comment-input-section">
+          <textarea class="comment-input" 
+                    placeholder="说点什么..." 
+                    value="{{commentText}}" 
+                    bindinput="onCommentInput"
+                    maxlength="200"
+                    auto-focus="true"></textarea>
+          <view class="comment-actions">
+            <text class="char-count">{{commentText.length}}/200</text>
+            <button class="send-comment-btn" 
+                    bindtap="sendComment" 
+                    disabled="{{commentText.length === 0 || commentLoading}}">
+              {{commentLoading ? '发送中...' : '发送'}}
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

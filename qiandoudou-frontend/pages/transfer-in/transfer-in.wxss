@@ -1,0 +1,493 @@
+/* pages/transfer-in/transfer-in.wxss */
+.container {
+  min-height: 100vh;
+  background: #f1f2f3;
+  padding-bottom: 120px;
+}
+
+/* 顶部导航 */
+.top-nav {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  background: #f1f2f3;
+  padding: 0 16px;
+  position: relative;
+  z-index: 100;
+  margin-top: 44px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.back-btn {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-arrow {
+  font-size: 48px;
+  color: #000000e6;
+  font-weight: 300;
+}
+
+.nav-right {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.back-icon {
+  font-size: 20px;
+  color: #000;
+  font-weight: 300;
+}
+
+/* 页签切换 */
+.tab-section {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  padding: 20px 0;
+  background: #f1f2f3;
+}
+
+.tab-item {
+  position: relative;
+  padding: 8px 0;
+}
+
+.tab-item.active {
+  color: #FF6B35;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #FF6B35;
+  border-radius: 1px;
+}
+
+.tab-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: inherit;
+}
+
+.tab-item:not(.active) .tab-text {
+  color: #999;
+}
+
+/* 直接转入页面 */
+.direct-transfer {
+  padding: 0 16px;
+}
+
+/* 转出金额卡片 */
+.amount-card {
+  background: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 0;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+}
+
+.close-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-icon {
+  font-size: 18px;
+  color: #999;
+}
+
+.amount-input-section {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 8px;
+}
+
+.currency-symbol {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+}
+
+.amount-input {
+  flex: 1;
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.amount-input::placeholder {
+  color: #ccc;
+}
+
+/* 备注卡片 */
+.note-card {
+  background: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.note-header {
+  padding: 20px 20px 0;
+}
+
+.note-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+}
+
+.note-content {
+  padding: 20px;
+}
+
+.note-textarea {
+  width: 100%;
+  min-height: 120px;
+  font-size: 14px;
+  color: #000;
+  line-height: 1.6;
+  border: none;
+  outline: none;
+  background: transparent;
+  resize: none;
+}
+
+.note-textarea::placeholder {
+  color: #999;
+}
+
+.note-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  margin-bottom: 12px;
+}
+
+.retry-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #FF6B35;
+  border-radius: 16px;
+  background: transparent;
+}
+
+.retry-btn:active {
+  background: #fff5f0;
+}
+
+.retry-icon {
+  font-size: 14px;
+}
+
+.retry-text {
+  font-size: 14px;
+  color: #FF6B35;
+  font-weight: 500;
+}
+
+.char-count {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 图片上传区域 */
+.image-upload-section {
+  margin-top: 16px;
+}
+
+.upload-placeholder {
+  width: 120px;
+  height: 120px;
+  background: #f5f5f5;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-icon {
+  font-size: 32px;
+  color: #999;
+}
+
+.uploaded-image {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.note-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.image-tag {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag-text {
+  font-size: 12px;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 自动攒页面 */
+.auto-save {
+  padding: 0 16px;
+}
+
+/* 设置卡片 */
+.setting-card {
+  background: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-row-static {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.setting-label {
+  font-size: 16px;
+  color: #000;
+  font-weight: 500;
+}
+
+.setting-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.value-text {
+  font-size: 16px;
+  color: #000;
+}
+
+.value-text.gray {
+  color: #999;
+}
+
+.arrow-icon {
+  font-size: 16px;
+  color: #999;
+  font-weight: 300;
+}
+
+/* 收益预估卡片 */
+.estimate-card {
+  background: #fff5f0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.estimate-text {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.highlight {
+  font-weight: 600;
+  color: #000;
+}
+
+.highlight.orange {
+  color: #FF6B35;
+}
+
+/* 计划备注区域 */
+.plan-note-section {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.plan-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f9f9f9;
+  margin-bottom: 20px;
+}
+
+.plan-input::placeholder {
+  color: #999;
+}
+
+/* 主题按钮 */
+.theme-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.theme-btn {
+  flex: 1;
+  height: 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+}
+
+.theme-btn.active {
+  border-color: #FF6B35;
+  background: #fff5f0;
+}
+
+.theme-text {
+  font-size: 14px;
+  color: #333;
+}
+
+.theme-btn.active .theme-text {
+  color: #FF6B35;
+  font-weight: 600;
+}
+
+/* 协议区域 */
+.agreement-section {
+  text-align: center;
+}
+
+.agreement-text {
+  font-size: 12px;
+  color: #FF6B35;
+  text-decoration: underline;
+}
+
+/* 底部确认按钮 */
+.bottom-action {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 16px;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  z-index: 100;
+}
+
+.confirm-btn {
+  width: 100%;
+  height: 52px;
+  background: #4A90E2;
+  border: none;
+  border-radius: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-btn:disabled {
+  background: #ccc;
+}
+
+.confirm-btn:not(:disabled):active {
+  background: #357ABD;
+}
+
+.btn-text {
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 600;
+}

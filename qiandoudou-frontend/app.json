@@ -1,0 +1,29 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/home/home",
+    "pages/wallet-detail/wallet-detail",
+    "pages/create-wallet/create-wallet",
+    "pages/transfer-in/transfer-in",
+    "pages/transfer-out/transfer-out",
+    "pages/social/social",
+    "pages/user-profile/user-profile",
+    "pages/user-social-profile/user-social-profile",
+    "pages/edit-profile/edit-profile",
+    "pages/wallet-messages/wallet-messages",
+    "pages/script-detail/script-detail",
+    "pages/ai-partner/ai-partner",
+    "pages/ai-chat/ai-chat",
+    "pages/couple-savings/couple-savings"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "钱兜兜",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f5f5"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

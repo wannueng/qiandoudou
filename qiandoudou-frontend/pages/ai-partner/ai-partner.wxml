@@ -1,0 +1,42 @@
+<!--pages/ai-partner/ai-partner.wxml-->
+<!-- AI伴侣列表内容 -->
+<view class="container">
+  <!-- 头部 -->
+  <view class="header">
+    <text class="header-title">选择AI伴侣</text>
+    <text class="header-subtitle">选择一个AI伴侣和你一起攒钱</text>
+  </view>
+
+  <!-- AI伴侣列表 -->
+  <view class="partner-list">
+    <view wx:for="{{partners}}" wx:key="id" 
+          class="partner-card {{selectedPartnerId === item.id ? 'selected' : ''}}"
+          bindtap="selectPartner" 
+          data-id="{{item.id}}">
+      
+      <view class="partner-avatar">
+        <image class="avatar-image" src="{{item.avatar}}" mode="aspectFill" />
+        <view wx:if="{{selectedPartnerId === item.id}}" class="selected-icon">✓</view>
+      </view>
+      
+      <view class="partner-info">
+        <text class="partner-name">{{item.name}}</text>
+        <text class="partner-desc">{{item.description}}</text>
+        <view class="partner-tags">
+          <text wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag" class="tag">{{tag}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 底部按钮 - 独立于container外 -->
+<view class="bottom-actions">
+  <view class="confirm-btn-wrapper" 
+        data-disabled="{{!selectedPartnerId}}"
+        bindtap="confirmSelection">
+    <button class="confirm-btn" disabled="{{!selectedPartnerId}}">
+      确认选择{{selectedPartnerId ? '' : '(请先选择AI伴侣)'}}
+    </button>
+  </view>
+</view>

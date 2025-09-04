@@ -1,0 +1,225 @@
+<!--pages/home/home.wxml-->
+<view class="container">
+  <!-- 钱包页面 -->
+  <view wx:if="{{currentTab === 'wallet'}}" class="wallet-page">
+    <!-- 顶部导航栏 -->
+    <view class="top-nav">
+      <view class="nav-left">
+        <view class="back-btn" bindtap="handleLogout">
+          <text class="back-arrow">‹</text>
+        </view>
+        <text class="nav-title">钱兜兜</text>
+      </view>
+      <view class="nav-right">
+        <view class="notification-icon-new" bindtap="showNotifications">
+          <image class="notification-icon-img" src="/images/res/钱兜兜2/png/7AB14F84-3AAF-42E6-9C09-AD1AC9545E14.png" mode="aspectFit"/>
+          <view wx:if="{{unreadMessageCount > 0}}" class="unread-badge">
+            <text class="unread-count">{{unreadMessageCount > 99 ? '99+' : unreadMessageCount}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 钱包列表 -->
+    <view wx:if="{{wallets.length > 0}}" class="wallet-list-section">
+      <view wx:for="{{wallets}}" wx:key="id" class="wallet-card" 
+            style="{{item.backgroundStyle}}" 
+            bindtap="handleWalletTap" 
+            data-id="{{item.id}}">
+        <!-- 钱包信息 -->
+        <view class="wallet-info">
+          <view class="wallet-header">
+            <text class="wallet-title">{{item.name || '钱兜兜'}}</text>
+            <text class="wallet-type">{{item.type === 1 ? '个人钱包' : '情侣钱包'}}</text>
+          </view>
+          <view class="wallet-amount">
+            <text class="amount-text">¥ {{item.balance || '0.00'}}</text>
+          </view>
+          
+          <!-- AI伴侣信息（情侣钱包） -->
+          <view wx:if="{{item.type === 2 && item.ai_partner_name}}" class="ai-partner-info">
+            <text class="partner-label">AI伴侣：</text>
+            <text class="partner-name">{{item.ai_partner_name}}</text>
+          </view>
+        </view>
+        
+        <!-- 右上角头像已移除 -->
+      </view>
+    </view>
+    
+    <!-- 没有钱包时显示欢迎信息 -->
+    <view wx:if="{{wallets.length === 0 && !showWalletTypeModal}}" class="welcome-section">
+      <view class="welcome-card">
+        <text class="welcome-title">欢迎来到钱兜兜！</text>
+        <text class="welcome-desc">开始创建你的第一个钱兜兜吧～</text>
+      </view>
+    </view>
+
+
+
+    <!-- 新建钱兜兜按钮 -->
+    <view class="create-wallet-section">
+      <view class="create-wallet-card" bindtap="handleCreateWallet">
+        <view class="create-content">
+          <text class="add-icon">+</text>
+          <text class="create-text">新建钱兜兜</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 兜圈圈页面 -->
+  <view wx:if="{{currentTab === 'social'}}" class="social-page">
+    <!-- 顶部导航栏 -->
+    <view class="social-top-nav">
+      <view class="nav-left" bindtap="handleBack">
+        <view class="back-icon"></view>
+      </view>
+      <view class="nav-title">兜圈圈</view>
+      <view class="nav-right">
+        <view class="user-icon-new" bindtap="navigateToUserSocialProfile">
+          <image class="user-icon-img" src="/images/res/钱兜兜2/png/53EAEFAA-39B8-4E6C-B88C-1DB241C01C23.png" mode="aspectFit"/>
+        </view>
+        <view class="notification-icon-new" bindtap="showNotifications">
+          <image class="notification-icon-img" src="/images/res/钱兜兜2/png/7AB14F84-3AAF-42E6-9C09-AD1AC9545E14.png" mode="aspectFit"/>
+          <view wx:if="{{unreadMessageCount > 0}}" class="unread-badge">
+            <text class="unread-count">{{unreadMessageCount > 99 ? '99+' : unreadMessageCount}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 动态列表 -->
+    <scroll-view class="social-posts-scroll" scroll-y="true" bindscrolltolower="loadMorePosts">
+      <view wx:if="{{posts.length === 0}}" class="social-empty-state">
+        <text class="empty-icon">💬</text>
+        <text class="empty-text">还没有动态，快来分享你的理财心得吧！</text>
+        <!-- 调试按钮 -->
+        <button bindtap="testAPICall" style="margin-top: 20px; background: #007aff; color: white;">测试API调用</button>
+        <button bindtap="forceRefreshSocial" style="margin-top: 10px; background: #ff3b30; color: white;">强制刷新</button>
+        <button bindtap="clearStorage" style="margin-top: 10px; background: #ff9500; color: white;">清理存储</button>
+      </view>
+
+      <view wx:for="{{posts}}" wx:key="id" class="social-post-card" bindtap="goToWalletDetail" data-wallet-id="{{item.wallet_id}}" data-index="{{index}}">
+        <!-- 动态卡片背景样式 -->
+        <view class="post-bg" style="{{item.backgroundStyle}}"></view>
+        
+        <!-- 粉丝标签 -->
+        <view class="fans-badge">粉丝 {{item.fansCount}}</view>
+        
+        <!-- 动态内容区域 -->
+        <view class="post-content-area">
+          <!-- 钱包信息和总金额 -->
+          <view class="post-main-header">
+            <view class="post-title">{{item.title}}</view>
+            <view class="post-amount">¥{{item.total_amount}}</view>
+          </view>
+          
+          <!-- 标签和描述 -->
+          <view class="post-tags-desc">
+            <text class="tag" wx:for="{{item.tags}}" wx:key="*this">#{{item}}</text>
+            <text class="description">{{item.description}}</text>
+          </view>
+          
+          <!-- 最新两笔账单 -->
+          <view class="recent-transactions">
+            <view wx:for="{{item.recent_transactions}}" wx:key="id" class="transaction-item">
+              <view class="transaction-user-avatar">
+                <text class="avatar-text">{{item.user_nickname.charAt(0)}}</text>
+              </view>
+              <view class="transaction-content">
+                <text class="transaction-desc">{{item.user_nickname}}：{{item.comment}}</text>
+                <text wx:if="{{item.amount > 0}}" class="amount-change">+¥{{item.amount}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 参与人数 -->
+        <view class="participants">{{item.participantCount}}人</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="nav-item {{currentTab === 'wallet' ? 'active' : ''}}" bindtap="switchTab" data-tab="wallet">
+      <view class="nav-icon-container">
+        <view class="wallet-icon-new">
+          <view class="money-bag-body"></view>
+          <view class="money-bag-top"></view>
+          <view class="coin-center"></view>
+        </view>
+      </view>
+      <text class="nav-text">钱兜兜</text>
+    </view>
+    <view class="nav-item {{currentTab === 'social' ? 'active' : ''}}" bindtap="switchTab" data-tab="social">
+      <view class="nav-icon-container">
+        <view class="social-icon-new">
+          <view class="circle-outer"></view>
+          <view class="circle-inner"></view>
+          <view class="coin-center"></view>
+        </view>
+      </view>
+      <text class="nav-text">兜圈圈</text>
+    </view>
+  </view>
+
+  <!-- 钱包类型选择模态框 -->
+  <view wx:if="{{showWalletTypeModal}}" class="modal-overlay" bindtap="hideWalletTypeModal">
+    <view class="wallet-type-modal" catchtap="stopPropagation">
+      <!-- 模态框头部 -->
+      <view class="modal-header">
+        <text class="modal-title">选择钱兜兜用途</text>
+        <!-- 只有非首次用户才显示关闭按钮 -->
+        <view wx:if="{{!isFirstTimeUser}}" class="modal-close" bindtap="hideWalletTypeModal">
+          <text class="close-icon">×</text>
+        </view>
+      </view>
+      
+      <!-- 钱包类型选项 -->
+      <view class="wallet-type-options">
+        <!-- 自己攒钱 -->
+        <view class="wallet-type-option {{selectedWalletType === 'personal' ? 'selected' : ''}}" bindtap="selectWalletType" data-type="personal">
+          <view class="option-icon personal">
+            <view class="person-avatar">
+              <text class="avatar-icon">👤</text>
+            </view>
+          </view>
+          <view class="option-content">
+            <text class="option-title">自己攒钱</text>
+            <text class="option-desc">自己攒钱，分类管钱等</text>
+          </view>
+          <view class="option-radio">
+            <view class="radio-circle {{selectedWalletType === 'personal' ? 'selected' : ''}}">
+              <text wx:if="{{selectedWalletType === 'personal'}}" class="check-mark">✓</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 情侣攒钱 -->
+        <view class="wallet-type-option {{selectedWalletType === 'couple' ? 'selected' : ''}}" bindtap="selectWalletType" data-type="couple">
+          <view class="option-icon couple">
+            <image class="couple-avatar-image" src="/images/情侣攒头像2.png" mode="aspectFill"></image>
+          </view>
+          <view class="option-content">
+            <text class="option-title">情侣攒钱</text>
+            <text class="option-desc">和AI伴侣一起攒钱</text>
+          </view>
+          <view class="option-radio">
+            <view class="radio-circle {{selectedWalletType === 'couple' ? 'selected' : ''}}">
+              <text wx:if="{{selectedWalletType === 'couple'}}" class="check-mark">✓</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 确认按钮 -->
+      <view class="modal-footer">
+        <button class="confirm-create-btn" bindtap="confirmCreateWallet" disabled="{{!selectedWalletType}}">
+          <text class="btn-text">确认新建钱兜兜</text>
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,145 @@
+<!--pages/script-detail/script-detail.wxml-->
+<view class="container">
+  <!-- 剧本列表模式 -->
+  <view wx:if="{{!selectedScript}}" class="script-list-page">
+    <view class="page-header">
+      <view class="back-button" bindtap="goBackToWallet">
+        <text class="back-icon">‹</text>
+        <text class="back-text">剧本攒</text>
+      </view>
+    </view>
+
+    <view class="current-script" wx:if="{{userProgress}}">
+      <text class="section-title">正在追</text>
+      <view class="current-script-card">
+        <image class="current-cover" src="{{selectedScript.coverImage}}" mode="aspectFill" />
+        <view class="current-info">
+          <text class="current-title">{{selectedScript.title}}</text>
+          <text class="current-progress">{{userProgress.currentChapter}}/{{selectedScript.totalChapters}}集 | 已攒{{userProgress.totalPaid}}元</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="recommended-section">
+      <text class="section-title">推荐</text>
+      <view class="scripts-grid">
+        <view wx:for="{{filteredScripts}}" wx:key="id" 
+              class="script-card"
+              bindtap="selectScript" 
+              data-script="{{item}}">
+          <view class="script-cover-container">
+            <image class="script-cover" src="{{item.coverImage}}" mode="aspectFill" />
+            <view class="follower-tag">超{{item.followerCount}}万跟</view>
+          </view>
+          <view class="script-info">
+            <text class="script-title">{{item.title}}</text>
+            <text class="script-meta">{{item.totalChapters}}集 | 预计攒{{item.targetAmount}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 剧本详情模式 -->
+  <view wx:else class="script-detail-page">
+    <!-- 头部导航 -->
+    <view class="detail-header">
+      <view class="back-button" bindtap="goBack">
+        <text class="back-icon">‹</text>
+        <text class="back-text">剧本攒</text>
+      </view>
+    </view>
+
+    <!-- 剧本标题和进度 -->
+    <view class="script-title-section">
+      <image class="script-avatar" src="{{selectedScript.coverImage}}" mode="aspectFill" />
+      <view class="title-info">
+        <text class="main-title">{{selectedScript.title}}</text>
+        <text class="progress-info">{{currentChapter}}/{{selectedScript.totalChapters}}集 | 已攒{{userProgress.totalPaid || 0}}元</text>
+      </view>
+    </view>
+
+    <!-- 章节内容区域 -->
+    <view class="chapter-content">
+      <text class="chapter-title">第{{currentChapter}}集 {{chapterContent.title}}</text>
+      
+      <!-- 内容展示 -->
+      <view class="content-display">
+        <!-- 视频内容 -->
+        <video wx:if="{{chapterContent.videoUrl && !videoLoadError}}" 
+               id="chapterVideo"
+               class="chapter-video"
+               src="{{chapterContent.videoUrl}}"
+               controls
+               show-fullscreen-btn
+               object-fit="cover"
+               initial-time="0"
+               binderror="onVideoError"
+               bindloadeddata="onVideoLoaded"
+               bindfullscreenchange="onFullscreenChange"
+               bindcanplay="onVideoCanPlay">
+        </video>
+        
+        <!-- 调试信息显示 -->
+        <view wx:if="{{chapterContent.videoUrl}}" class="debug-info">
+          <text class="debug-text">视频URL: {{chapterContent.videoUrl}}</text>
+          <text class="debug-text">全屏状态: {{isFullscreen ? '是' : '否'}}</text>
+          <text class="debug-text">视频上下文: {{videoContext ? '已初始化' : '未初始化'}}</text>
+          <button class="debug-button" bindtap="clearVideoCache">清除视频缓存</button>
+        </view>
+        
+        <!-- 视频加载失败时的替代显示 -->
+        <view wx:if="{{chapterContent.videoUrl && videoLoadError}}" class="video-error-fallback">
+          <text class="error-text">视频加载失败，显示文字内容</text>
+          <text class="video-path">视频路径: {{chapterContent.videoUrl}}</text>
+          <button class="retry-btn" bindtap="retryVideo">重试视频</button>
+        </view>
+        
+        <!-- 图片内容 -->
+        <image wx:elif="{{chapterContent.imageUrl}}" 
+               class="chapter-image" 
+               src="{{chapterContent.imageUrl}}" 
+               mode="aspectFit" />
+        
+        <!-- 文本内容（当有视频错误时也显示） -->
+        <view wx:if="{{chapterContent.content || (chapterContent.videoUrl && videoLoadError)}}" class="text-content-section">
+          <text class="chapter-text">{{chapterContent.content || '视频播放遇到问题，请查看文字描述或重试视频播放。'}}</text>
+        </view>
+      </view>
+
+      <!-- 选择选项 -->
+      <view wx:if="{{chapterContent && chapterContent.choices}}" class="choices-section">
+        <text class="choice-prompt">打算怎么做，你选择：</text>
+        <view class="choices-container">
+          <block wx:for="{{chapterContent.choicesList}}" wx:key="selection">
+            <view class="choice-button {{selectedChoice === item.selection ? 'selected' : ''}}"
+                  bindtap="selectChoice"
+                  data-choice="{{item.selection}}">
+              <text class="choice-text">{{item.selection}}</text>
+              <text class="choice-cost">¥ {{item.cost}}.00</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <!-- 章节选择器 -->
+    <view class="chapter-selector">
+      <view wx:for="{{availableChapters}}" wx:key="number"
+            class="chapter-number {{item.current ? 'current' : ''}} {{!item.unlocked ? 'locked' : ''}}"
+            bindtap="selectChapter"
+            data-chapter="{{item.number}}">
+        {{item.number}}
+      </view>
+    </view>
+
+    <!-- 底部转入按钮 -->
+    <view class="bottom-transfer">
+      <button class="transfer-button {{transferButtonEnabled ? 'enabled' : 'disabled'}}"
+              bindtap="transferToWallet"
+              disabled="{{!transferButtonEnabled}}">
+        向钱兜兜转入
+      </button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,110 @@
+<!--pages/transfer-out/transfer-out.wxml-->
+<view class="container">
+  <!-- 顶部导航 -->
+  <view class="top-nav">
+    <view class="nav-left">
+      <view class="back-btn" bindtap="goBack">
+        <text class="back-arrow">‹</text>
+      </view>
+    </view>
+    <view class="nav-center">
+      <text class="nav-title">转出</text>
+    </view>
+    <view class="nav-right"></view>
+  </view>
+
+  <!-- 转出至区域 -->
+  <view class="transfer-to-section">
+    <text class="section-title">转出至</text>
+    
+    <!-- 银行卡选项 -->
+    <view class="bank-card-item active" bindtap="selectBankCard" data-type="pingan">
+      <view class="bank-info">
+        <view class="bank-logo pingan">
+          <text class="bank-text">中国平安</text>
+        </view>
+        <view class="bank-details">
+          <text class="bank-name">平安银行(7848)</text>
+          <text class="bank-action">切换</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="bank-card-item" bindtap="selectBankCard" data-type="other">
+      <view class="bank-info">
+        <view class="bank-logo other">
+          <text class="bank-icon">💰</text>
+        </view>
+        <view class="bank-details">
+          <text class="bank-name">牛津桥上喝咖啡</text>
+          <text class="bank-action">切换</text>
+        </view>
+      </view>
+      <view class="expand-icon">
+        <text class="arrow-down">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 转出金额区域 -->
+  <view class="amount-section">
+    <view class="amount-card">
+      <text class="amount-title">转出金额</text>
+      <view class="amount-input-container">
+        <text class="currency">¥</text>
+        <input class="amount-input" 
+               type="digit" 
+               placeholder="可转出金额10000000.49元"
+               value="{{transferAmount}}" 
+               bindinput="onAmountInput" />
+        <view class="transfer-all-btn" bindtap="transferAll">
+          <text class="all-text">全部转出</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 备注区域 -->
+  <view class="note-section">
+    <view class="note-card">
+      <text class="note-title">备注</text>
+      <textarea class="note-textarea" 
+                placeholder="山高水长，风景美如画。坐等仙女下凡，赐予我一片云彩，好飞到湖里泡个澡！"
+                value="{{transferNote}}"
+                bindinput="onNoteInput"
+                bindfocus="onNoteFocus"
+                bindblur="onNoteBlur"
+                cursor="{{noteCursor}}"
+                selection-start="{{noteSelectionStart}}"
+                selection-end="{{noteSelectionEnd}}"
+                maxlength="200"></textarea>
+      
+      <view class="note-actions">
+        <view class="retry-btn" bindtap="retryNote">
+          <text class="retry-icon">🔄</text>
+          <text class="retry-text">再试一次</text>
+        </view>
+        <text class="char-count">{{noteLength}}/200</text>
+      </view>
+      
+      <!-- 图片上传区域 -->
+      <view class="image-section">
+        <view wx:if="{{!uploadedImage}}" class="image-placeholder" bindtap="uploadImage">
+          <text class="camera-icon">📷</text>
+        </view>
+        <view wx:else class="uploaded-image-container">
+          <image class="uploaded-image" src="{{uploadedImage}}" mode="aspectFill"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部确认按钮 -->
+  <view class="bottom-action">
+    <button class="confirm-btn" 
+            bindtap="confirmTransferOut" 
+            disabled="{{transferLoading}}">
+      <text class="btn-text">{{transferLoading ? '处理中...' : '确认转出'}}</text>
+    </button>
+  </view>
+</view>

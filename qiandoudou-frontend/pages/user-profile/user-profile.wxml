@@ -1,0 +1,138 @@
+<!--pages/user-profile/user-profile.wxml-->
+<view class="container">
+  <!-- 顶部钱包背景区域 -->
+  <view class="wallet-header-section">
+    <!-- 背景图片和遮罩 -->
+    <view class="wallet-background" style="{{walletBackgroundStyle}}">
+      <view class="background-overlay"></view>
+      
+      <!-- 顶部导航 -->
+      <view class="header-nav">
+        <view class="nav-left" bindtap="goBack">
+          <view class="back-icon">‹</view>
+        </view>
+        <view class="nav-right">
+          <!-- 空白区域 -->
+        </view>
+      </view>
+      
+      <!-- 用户信息 -->
+      <view class="user-info" catchtap="stopPropagation">
+        <view class="user-avatar">
+          <text class="avatar-text">{{wallet.name ? wallet.name.charAt(0) : 'U'}}</text>
+        </view>
+        <view class="user-details">
+          <text class="user-title">{{wallet.name || '07年小女生攒钱'}}💗</text>
+          <view class="user-tags-row">
+            <text class="user-tags">#成长 #生活</text>
+            <text class="user-desc">{{userInfo.description || '07年小女生从2025.2.1开始存钱 目标…'}}</text>
+          </view>
+          <view class="user-badges">
+            <view class="badge">自己用</view>
+            <view class="badge">公开</view>
+          </view>
+        </view>
+        <view class="expand-icon">展开</view>
+      </view>
+      
+      <!-- 统计信息和关注按钮 -->
+      <view class="stats-and-follow" catchtap="stopPropagation">
+        <view class="stats-row">
+          <view class="stat-item">
+            <text class="stat-number">{{socialStats.fansCount}}</text>
+            <text class="stat-label">粉丝</text>
+          </view>
+          <view class="stat-item">
+            <text class="stat-number">{{socialStats.likesCount}}</text>
+            <text class="stat-label">获赞</text>
+          </view>
+          <view class="stat-item">
+            <text class="stat-number">{{socialStats.viewsCount}}</text>
+            <text class="stat-label">浏览</text>
+          </view>
+        </view>
+        
+        <view class="follow-buttons">
+          <image class="follow-btn-image {{isFollowing ? 'followed' : ''}}" 
+                 src="{{isFollowing ? '/images/res/个人主详情/png/已关注.png' : '/images/res/个人主详情/png/关注.png'}}" 
+                 bindtap="toggleFollow"
+                 mode="aspectFit" />
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 总金额卡片 -->
+  <view class="balance-card">
+    <text class="balance-label">总金额（元）</text>
+    <text class="balance-amount">{{wallet.balance || '31123.12'}}</text>
+  </view>
+
+  <!-- 标签栏 -->
+  <view class="tab-bar">
+    <view class="tab-item {{activeTab === 'bill' ? 'active' : ''}}" 
+          bindtap="switchTab" 
+          data-tab="bill">
+      <text class="tab-text">账单</text>
+      <view wx:if="{{activeTab === 'bill'}}" class="tab-indicator"></view>
+    </view>
+  </view>
+
+  <!-- 账单列表 -->
+  <view wx:if="{{activeTab === 'bill'}}" class="transactions-list">
+    <view wx:if="{{transactions.length === 0}}" class="empty-transactions">
+      <text class="empty-text">暂无账单记录</text>
+    </view>
+
+    <view wx:for="{{transactions}}" wx:key="id" class="transaction-item">
+      <!-- 用户头像 -->
+      <view class="transaction-avatar">
+        <text class="avatar-text">{{item.description ? item.description.charAt(0) : 'U'}}</text>
+      </view>
+      
+      <!-- 交易信息 -->
+      <view class="transaction-info">
+        <view class="transaction-header">
+          <text class="transaction-title">{{item.description}}</text>
+          <text class="transaction-amount">{{item.amount}}</text>
+        </view>
+        <text class="transaction-category">{{item.category}}</text>
+        <text class="transaction-date">{{item.date}}</text>
+        
+        <!-- 互动区域 -->
+        <view class="transaction-interactions">
+          <!-- 用户评论 -->
+          <view wx:if="{{item.userComment}}" class="user-comment">
+            <view class="comment-avatar">
+              <text class="avatar-text">{{item.userComment.username ? item.userComment.username.charAt(0) : 'U'}}</text>
+            </view>
+            <view class="comment-content">
+              <text class="comment-username">{{item.userComment.username}}：</text>
+              <text class="comment-text">{{item.userComment.message}}</text>
+            </view>
+          </view>
+          
+          <!-- 点赞和评论 -->
+          <view class="interaction-row">
+            <view class="interaction-item" bindtap="likeTransaction" 
+                  data-id="{{item.id}}" data-index="{{index}}">
+              <view class="like-icon"></view>
+              <text class="interaction-count">{{item.likes || 0}}</text>
+            </view>
+            
+            <view class="interaction-item" bindtap="commentTransaction" data-id="{{item.id}}">
+              <view class="comment-icon"></view>
+              <text class="interaction-count">{{item.comments || 0}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 分隔线 -->
+    <view wx:if="{{index < transactions.length - 1}}" class="transaction-divider"></view>
+  </view>
+
+  <!-- 底部安全区域 -->
+  <view class="safe-area-bottom"></view>
+</view>

@@ -1,0 +1,223 @@
+/* pages/login/login.wxss */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.login-box {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 30px 30px;
+  width: 100%;
+  max-width: 350px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Logo区域 */
+.logo-section {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.logo-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.logo-text {
+  display: block;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.logo-subtitle {
+  font-size: 14px;
+  color: #999;
+}
+
+/* 登录方式 */
+.login-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.wechat-login-btn,
+.phone-login-btn,
+.demo-login-btn {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s;
+}
+
+.wechat-login-btn {
+  background: #07c160;
+  color: white;
+}
+
+.wechat-login-btn:active {
+  background: #06ad56;
+  transform: scale(0.98);
+}
+
+.phone-login-btn {
+  background: #409EFF;
+  color: white;
+}
+
+.phone-login-btn:active {
+  background: #337ecc;
+  transform: scale(0.98);
+}
+
+.demo-login-btn {
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #e0e0e0;
+}
+
+.demo-login-btn:active {
+  background: #ebebeb;
+  transform: scale(0.98);
+}
+
+.wechat-icon,
+.phone-icon,
+.demo-icon {
+  font-size: 18px;
+}
+
+.login-text {
+  font-size: 16px;
+}
+
+/* 按钮禁用状态 */
+.wechat-login-btn[disabled],
+.phone-login-btn[disabled],
+.demo-login-btn[disabled] {
+  opacity: 0.6;
+  transform: none;
+}
+
+/* 服务协议 */
+.agreement {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  line-height: 1.5;
+}
+
+.agreement-text {
+  color: #999;
+}
+
+.agreement-link {
+  color: #409EFF;
+  text-decoration: underline;
+}
+
+/* 模态框样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 20px;
+  color: #999;
+  padding: 5px;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 0 20px 20px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.form-input {
+  width: 100%;
+  height: 45px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0 15px;
+  font-size: 16px;
+  background: #fafafa;
+}
+
+.form-input:focus {
+  border-color: #409EFF;
+  background: white;
+}
+
+.submit-btn {
+  width: 100%;
+  height: 45px;
+  background: #409EFF;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.submit-btn:active {
+  background: #337ecc;
+  transform: scale(0.98);
+}
+
+.submit-btn[disabled] {
+  opacity: 0.6;
+  transform: none;
+}

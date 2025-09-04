@@ -1,0 +1,384 @@
+/* pages/transfer-out/transfer-out.wxss */
+.container {
+  min-height: 100vh;
+  background: #f1f2f3;
+  padding-bottom: 120px;
+}
+
+/* 顶部导航 */
+.top-nav {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  background: #f1f2f3;
+  padding: 0 16px;
+  position: relative;
+  z-index: 100;
+  margin-top: 44px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.back-btn {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-arrow {
+  font-size: 48px;
+  color: #000000e6;
+  font-weight: 300;
+}
+
+.nav-right {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.back-icon {
+  font-size: 20px;
+  color: #000;
+  font-weight: 300;
+}
+
+/* 转出至区域 */
+.transfer-to-section {
+  padding: 20px 16px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.bank-card-item {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bank-card-item.active {
+  border: 2px solid #4A90E2;
+}
+
+.bank-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.bank-logo {
+  width: 40px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bank-logo.pingan {
+  background: #FF6B35;
+}
+
+.bank-logo.other {
+  background: #4A90E2;
+}
+
+.bank-text {
+  font-size: 10px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.bank-icon {
+  font-size: 16px;
+}
+
+.bank-details {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bank-name {
+  font-size: 16px;
+  color: #000;
+  font-weight: 500;
+}
+
+.bank-action {
+  font-size: 14px;
+  color: #FF6B35;
+}
+
+.expand-icon {
+  margin-left: 8px;
+}
+
+.arrow-down {
+  font-size: 16px;
+  color: #FF6B35;
+  transform: rotate(90deg);
+}
+
+/* 转出金额区域 */
+.amount-section {
+  padding: 0 16px;
+  margin-bottom: 20px;
+}
+
+.amount-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.amount-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.amount-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.currency {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+}
+
+.amount-input {
+  flex: 1;
+  font-size: 16px;
+  color: #999;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.amount-input::placeholder {
+  color: #999;
+  font-size: 14px;
+}
+
+.transfer-all-btn {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid #FF6B35;
+  border-radius: 16px;
+}
+
+.transfer-all-btn:active {
+  background: #fff5f0;
+}
+
+.all-text {
+  font-size: 12px;
+  color: #FF6B35;
+  font-weight: 500;
+}
+
+/* 备注区域 */
+.note-section {
+  padding: 0 16px;
+}
+
+.note-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.note-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.note-textarea {
+  width: 100%;
+  min-height: 100px;
+  font-size: 14px;
+  color: #000;
+  line-height: 1.6;
+  border: none;
+  outline: none;
+  background: transparent;
+  resize: none;
+  margin-bottom: 16px;
+}
+
+.note-textarea::placeholder {
+  color: #999;
+}
+
+.note-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.retry-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #FF6B35;
+  border-radius: 16px;
+  background: transparent;
+}
+
+.retry-btn:active {
+  background: #fff5f0;
+}
+
+.retry-icon {
+  font-size: 14px;
+}
+
+.retry-text {
+  font-size: 14px;
+  color: #FF6B35;
+  font-weight: 500;
+}
+
+.char-count {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 图片区域 */
+.image-section {
+  display: flex;
+  gap: 12px;
+}
+
+.image-placeholder {
+  width: 120px;
+  height: 120px;
+  background: #f5f5f5;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-icon {
+  font-size: 32px;
+  color: #999;
+}
+
+.uploaded-image-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.uploaded-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.image-tag {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag-text {
+  font-size: 12px;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 底部确认按钮 */
+.bottom-action {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 16px;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  z-index: 100;
+}
+
+.confirm-btn {
+  width: 100%;
+  height: 52px;
+  background: #4A90E2;
+  border: none;
+  border-radius: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-btn:disabled {
+  background: #ccc;
+}
+
+.confirm-btn:not(:disabled):active {
+  background: #357ABD;
+}
+
+.btn-text {
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 600;
+}

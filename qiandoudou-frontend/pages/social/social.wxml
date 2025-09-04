@@ -1,0 +1,97 @@
+<!--pages/social/social.wxml-->
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="top-nav">
+    <view class="nav-left" bindtap="goBack">
+      <view class="back-icon"></view>
+    </view>
+    <view class="nav-title">钱兜兜</view>
+    <view class="nav-right">
+      <view class="user-avatar test-avatar" bindtap="navigateToUserSocialProfile">
+        <text class="avatar-text">{{userInfo.nickname ? userInfo.nickname.charAt(0) : '👤'}}</text>
+      </view>
+      <view class="notification-icon" bindtap="showNotifications">
+        <view class="bell-icon"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 测试按钮 -->
+  <view class="test-section">
+    <view class="test-btn" bindtap="testWalletDetail">
+      <text class="test-text">🧪 测试别人钱包详情页</text>
+    </view>
+    
+    <!-- 测试钱包卡片 -->
+    <view class="test-wallet-card" bindtap="navigateToWalletDetail" data-wallet-id="1001">
+      <view class="test-wallet-bg" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+        <text class="test-wallet-title">🧪 测试钱包 - 宝儿的锦鲤小岛</text>
+        <text class="test-wallet-desc">点击进入别人的钱包详情页</text>
+        <view class="test-wallet-amount">¥2221.21</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 动态列表 -->
+  <scroll-view class="posts-scroll" scroll-y="true" bindscrolltolower="loadMore">
+    <view wx:if="{{posts.length === 0}}" class="empty-state">
+      <text class="empty-icon">💬</text>
+      <text class="empty-text">还没有动态，快来分享你的理财心得吧！</text>
+    </view>
+
+    <view wx:for="{{posts}}" wx:key="id" class="post-card" 
+          bindtap="navigateToWalletDetail" 
+          data-post-id="{{item.id}}" 
+          data-wallet-id="{{item.walletId || item.wallet_id}}">
+      <!-- 动态卡片背景样式 -->
+      <view class="post-bg" style="{{item.backgroundStyle}}"></view>
+      
+      <!-- 粉丝标签 -->
+      <view class="fans-badge">粉丝 {{item.fansCount}}</view>
+      
+      <!-- 动态内容区域 -->
+      <view class="post-content-area">
+        <!-- 用户信息和金额 -->
+        <view class="post-header">
+          <view class="post-title">{{item.title}}</view>
+          <view class="post-amount">¥{{item.amount}}</view>
+        </view>
+        
+        <!-- 标签和描述 -->
+        <view class="post-tags">
+          <text class="tag" wx:for="{{item.tags}}" wx:key="*this">#{{item}}</text>
+          <text class="description">{{item.description}}</text>
+        </view>
+        
+        <!-- 用户互动消息 -->
+        <view class="interactions">
+          <view wx:for="{{item.comments}}" wx:key="index" class="interaction-item">
+            <view class="user-avatar" bindtap="navigateToUserSocialProfile" catchtap="navigateToUserSocialProfile">
+              <text class="avatar-text">{{item.username.charAt(0)}}</text>
+            </view>
+            <view class="interaction-content">
+              <text class="user-name">{{item.username}}：</text>
+              <text class="message">{{item.message}}</text>
+              <text wx:if="{{item.amount}}" class="amount-change">{{item.amount}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 参与人数 -->
+      <view class="participants">{{item.participantCount}}人</view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="nav-item" bindtap="switchTab" data-tab="wallet">
+      <view class="nav-icon wallet-icon"></view>
+      <text class="nav-text">钱兜兜</text>
+    </view>
+    <view class="nav-item active" bindtap="switchTab" data-tab="social">
+      <view class="nav-icon social-icon"></view>
+      <text class="nav-text">兜圈圈</text>
+    </view>
+  </view>
+</view>
