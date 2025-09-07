@@ -23,16 +23,14 @@
     "autoAudits": false,
     "showShadowRootInWxmlPanel": true,
     "scopeDataCheck": false,
-    "uglifyFileName": false,
-    "checkInvalidKey": true,
-    "checkSiteMap": true,
-    "uploadWithSourceMap": true,
-    "compileHotReLoad": false,
-    "lazyloadPlaceholderEnable": false,
-    "preloadBackgroundData": false,
-    "autoAudits": false,
-    "showShadowRootInWxmlPanel": true,
-    "scopeDataCheck": false
+    "compileWorklet": false,
+    "packNpmManually": false,
+    "minifyWXSS": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true
   },
   "compileType": "miniprogram",
   "simulatorPluginLibVersion": {},
@@ -40,7 +38,7 @@
     "ignore": [],
     "include": []
   },
-  "appid": "wx86b697bfbe182700",
+  "appid": "wx8372421078267cd9",
   "editorSetting": {},
   "localSetting": {
     "urlCheck": false,
@@ -66,5 +64,6 @@
       "disablePlugins": [],
       "outputPath": ""
     }
-  }
+  },
+  "libVersion": "3.9.3"
 }
